@@ -1,0 +1,14 @@
+
+import argparse
+
+# argparse
+parser = argparse.ArgumentParser()
+
+parser.add_argument('input', type=str, help="ex) 20180820, you could save tagged_object in HDFS")
+
+
+args = parser.parse_args()
+
+
+user_input = args.input
+print("123",user_input)

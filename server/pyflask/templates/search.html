@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>CSS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    #jb-container {
+      margin: 10px auto;
+      padding: 20px;
+      border: 1px solid #bcbcbc;
+    }
+    #jb-header {
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #bcbcbc;
+    }
+    #jb-content {
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #bcbcbc;
+    }
+    #jb-sidebar {
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #bcbcbc;
+    }
+    #jb-footer {
+      padding: 20px;
+      border: 1px solid #bcbcbc;
+    }
+    @media ( min-width: 481px ) {
+      #jb-container {
+        width: 940px;
+      }
+      #jb-content {
+        width: 580px;
+        float: left;
+      }
+      #jb-sidebar {
+        width: 260px;
+        float: right;
+      }
+      #jb-footer {
+        clear: both;
+      }
+    }
+  </style>
+  </head>
+  <body>
+      <div id="jb-container">
+        <div id="jb-header">
+          <h1><BR>안녕하세요!</BR>저는 <span style="color:red">당신의 고민</span>이 궁금합니다</h1>
+        </div>
+        <div id="jb-content">
+          <h2>고민 입력창</h2>
+          <input type="text" placeholder="여기에 입력하세용~" name="item_id" id="item_id" style="width:20px;height:20px;font-size:20px;"/>
+        </div>
+        <div id="jb-sidebar">
+            <input type="button" font-size = 30px padding:20px id="bth-search" value="데이터 요청" onclick="test()" style="height:200px;width:200px"/>
+        </div>
+        <div id="jb-footer">
+          <h1 id="a"></p>
+        </div>
+     </div>
+    <!--<h1 id="a"></h1>-->
+  </body>
+  
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+        function test(){
+        $("#bth-search").prop("disabled",true);
+        
+        var text_data = $('#item_id').val();
+        
+        if(text_data.length == 0){
+            var json = "<h4>고민을 입력해주세요</h4>";
+            $('#a').html(json);
+            $("#bth-search").prop("disabled",false);
+        }else{
+        
+            $.ajax({
+        type:'POST',
+            url:'http://127.0.0.1:5000/item_request',
+            data:{
+                item_id:text_data
+            },
+            dataType:'JSON',
+            success:function(result){
+                   result = result.substring(1, result.length-3);
+                   var href_link = '';
+                   if(result == '고통'){
+                       href_link = "../gominsolve_pain";
+                   }else if(result == '건강'){
+                       href_link = "../gominsolve_health";
+                   }else if(result == '연애'){
+                       href_link = "../gominsolve_love";
+                   }else if(result == '게으름'){
+                       href_link = "../gominsolve_lazy";
+                   }else if(result == '겸손'){
+                       href_link = "../gominsolve_modest";
+                   }else if(result == '기도'){
+                       href_link = "../gominsolve_pray";
+                   }else if(result == '걱정'){
+                       href_link = "../gominsolve_fear";
+                   }else if(result == '죄'){
+                       href_link = "../gominsolve_sin";
+                   }else if(result == '일'){
+                       href_link = "../gominsolve_work";
+                   }else if(result == '진리'){
+                       href_link = "../gominsolve_truth";
+                   }else{
+                       href_link = "../info";
+                   }
+                   var json = "<h4>당신의 고민에 대한 인공지능의 답변???</h4>"
+                   + "<p><a href = '" + href_link+ "'>" + JSON.stringify(result) + "</a></p>";
+                   
+                   $('#a').html(json);
+
+                   $("#bth-search").prop("disabled",false);
+            },
+            error:function(xtr,status,error){
+                alert("error test!");
+                alert(xtr+":"+status+":"+error);
+                $("#bth-search").prop("disabled",false);
+                
+            }
+        });
+        }
+    }
+  </script>
+</html>

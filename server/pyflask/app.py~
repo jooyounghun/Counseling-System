@@ -1,0 +1,45 @@
+from flask import Flask, render_template
+app = Flask(__name__)
+import json
+#import mysql.connector
+
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
+@app.route('/info')
+def info():
+    return render_template('info.html')
+
+@app.route('/search')
+def item_search():
+    return render_template('search.html')
+
+@app.route('/item_request', methods=['POST'])
+def item_query():
+    value1 = request.form['item_id']
+    try:
+        item_sql="select * from student where id='"+value1+"'"
+        curs.excute(item_sql)
+        row_headers=[x[0] for x in curs.description]
+        rows=curs.fetchall()
+        json_data=[]
+        for result in rows:
+            json_data.append(dict(zip(row_headers,result)))
+        
+        json_return=json.dumps(json_data[0])
+    except:
+        json_return = json.dumps("test")
+        
+    return jsonify(json_return)
+
+    curs.close()
+
+
+if __name__ =='__main__':
+    app.run(host='0.0.0.0',port=5000)
+
+db.close()
